@@ -166,6 +166,29 @@ AWS CloudFormationテンプレートを作成の詳細は[ここ](http://docs.aw
 
 ## <a name="2">はじめに</a>
 
+### Signing Up for an AWS Account
+
+### Get Started
+
+Step 1: Sign up for the Service
+
+Step 2: Pick a template
+
+Step 3: Make sure you have prepared any required items for the stack
+
+Step 4: Create the stack
+
+Step 5: Monitor the progress of stack creation
+
+### Learn Template Basics
+
+### Walkthrough: Updating a Stack
+
+### Walkthrough: Custom Resources
+
+### Using CloudFormer to Create Templates
+
+### AWS CloudFormation Endpoints
 
 ## <a name="3">IAMによるアクセスコントロール</a>
 
