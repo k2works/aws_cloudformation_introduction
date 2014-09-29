@@ -104,7 +104,65 @@ AWS CloudFormationを使っている時、関連するリソースをスタッ�
 
 スタックの作成、更新、削除に関する詳細は[ここ](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacks.html)
 
+How Does AWS CloudFormation Work?
 
+Whenever you create a stack, AWS CloudFormation makes underlying service calls to AWS to provision and configure your resources. Note that AWS CloudFormation can only perform actions that you have permission to do. For example, to create Amazon EC2 instances by using AWS CloudFormation, you need permissions to create instances. You'll need similar permissions to terminate instances when you delete stacks with instances. You use AWS Identity and Access Management to manage permissions.
+
+The calls that AWS CloudFormation makes are all declared by your template. For example, suppose you have a template that describes an Amazon EC2 instance with a t1.micro instance type. When you use that template to create a stack, AWS CloudFormation calls the Amazon EC2 create instance API and specifies the instance type as t1.micro. The following diagram summarizes the AWS CloudFormation create stack workflow:
+
+### AWS CloudFormationはどのように動くのか
+
+スタックを作った時はいつでも、AWS CloudFormationはリソースのプロビジョニングと設定をするためのサービスを実行する。AWS CloudFormationは許可されたことしか実行できないことに注意してください。例えばAWS CloudFormationを使ってEC2インスタンスを作った場合インスタンスを作成する許可が必要になります。インスタンスと一緒にスタックを削除する場合も同様に許可が必要になります。許可を管理するには AWS Identity and Access Managementを使ってください。
+
+AWS CloudFormationから呼び出されるものは全てテンプレート内にあります。例えばt1.microインスタンスタイプのEC2インスタンスをテンプレートで利用する場合。スタックを作るためにテンプレートを使った時AWS CloudFormationはEC2インスタンス作成APIを呼び出しインスタンスタイプをt1.microに指定します。以下がAWS CloudFormationがスタックを作る流れです。
+
+1. テンプレートを作るまたは再利用する
+
+1. ローカルまたはS3バケットに保存する
+
+1. AWS CloudFormationを使ってテンプレートを元にスタックのベースを作る
+
+1. AWS CloudFormationが指定されたスタックリソースを構築・設定する
+
+Update Stack Workflow
+
+When you update a stack, you modify the original stack template. AWS CloudFormation compares the modified template with the original stack template and updates only the resources that you modified. The following diagram summarizes the update stack workflow:
+
+スタック更新の流れ
+
+スタックを更新した時、オリジナルスタックテンプレートを更新します。AWS CloudFormationはオリジナルスタックテンプレートと編集したテンプレートを比較して編集された部分だけリソースを更新します。以下がスタック更新の流れです。
+
+1. テンプレート編集
+
+1. ローカルまたはS3バケットに保存する
+
+1. AWS CloudFormationを使ってテンプレートを元にスタックのベースを作る
+
+1. AWS CloudFormationがオリジナルテンプレートと比較して適宜にスタックリソースを更新する
+
+Delete Stack Workflow
+
+When you delete a stack, you specify the stack to delete, and AWS CloudFormation deletes the stack and all the resources in that stack. You can delete stacks by using the AWS CloudFormation console, API, or AWS CLI.
+
+If you want to delete a stack but want to retain some resources in that stack, you can use a deletion policy to retain those resources.
+
+After all the resources have been deleted, AWS CloudFormation signals that your stack has been successfully deleted. If AWS CloudFormation cannot delete a resource, the stack will not be deleted. Any resources that haven't been deleted will remain until you can successfully delete the stack.
+
+スタック削除の流れ
+
+スタックを削除した時、どのスタックを削除するか特定すればAWS CloudFormationはスタックとスタック内の全てのリソースを削除します。AWS CloudFormationコンソール、APIまたはAWS CLIを使って削除もできます。
+
+Additional Resources
+
+For more information about creating AWS CloudFormation templates, see Template Anatomy.
+
+For more information about creating, updating, or deleting stacks, see Working with Stacks.
+
+追加リソース
+
+AWS CloudFormationテンプレートを作成の詳細は[ここ](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html)
+
+スタックの作成、更新または削除にかんする詳細は[ここ](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacks.html)
 
 ## <a name="2">はじめに</a>
 
