@@ -30,7 +30,7 @@ For a scalable web application that also includes a back-end database, you might
 
 Instead, you can create or modify an existing AWS CloudFormation template. Templates describes all of your resources and their properties. When you use that template to create an AWS CloudFormation stack, AWS CloudFormation provisions the Auto Scaling group, load balancer, and database for you. After the stack has been successfully created, your AWS resources are up and running. You can delete the stack just as easily, which deletes all the resources in the stack. By using AWS CloudFormation, you easily manage a collection of resources as a single unit.
 
-### 簡単にインフラ管理
+#### 簡単にインフラ管理
 
 バックエンドにデータベースを稼働させている拡張性のあるwebアプリケーションではElastic Load BalancingやRDSサービスインスタンスを使う必要があります。通常は個別に各リソースを設定します。リソースを作成した後それらのサービスがうまく共同で動くように設定する必要が有ります。これらの作業は複雑で時間がかかります。
 
@@ -42,7 +42,7 @@ If your application requires additional availability, you might replicate it in 
 
 When you use AWS CloudFormation, you can reuse your template to set up your resources consistently and repeatedly. Just describe your resources once and then provision the same resources over and over in multiple regions.
 
-### インフラの素早い切り替え
+#### インフラの素早い切り替え
 
 もしアプリケーションに追加の可用性が必要になったなら複数のリージョンで変更する必要がある。アプリケーションの変更にはリソースの変更も必要になる。アプリケーションに必要な全てのリソースを記録する以外に複数のリージョンで繰り返し同じリソースのプロビジョニングをしなければならない。
 
@@ -54,7 +54,7 @@ In some cases, you might have underlying resources that you want to upgrade incr
 
 When you provision your infrastructure with AWS CloudFormation, the AWS CloudFormation template describes exactly what resources are provisioned and their settings. Because these templates are text files, you simply track differences in your templates to track changes to your infrastructure, similar to the way developers control revisions to source code. For example, you can use a version control system with your templates so that you know exactly what changes were made, who made them, and when. If at any point you need to reverse changes to your infrastructure, you can use a previous version of your template.
 
-### 簡単に管理できインフラの変更を追跡できる
+#### 簡単に管理できインフラの変更を追跡できる
 
 いくつかのケースではリソースを継続的にアップグレードしたいでしょう。例えばオートスケールグループのインスタンスの最大数を減らすためより高いパフォーマンスのインスタンス変更する場合。もし、変更が完了した後に問題が発生したならオリジナルのセッテイングにロールバックする必要があります。手動だとリソースのどこが変わったかを覚えておく他にオリジナルのセッテイングがどうだったかも知っておく必要があります。
 
@@ -68,7 +68,7 @@ For an overview about how to use AWS CloudFormation, see How Does AWS CloudForma
 
 For pricing information, see AWS CloudFormation Pricing.
 
-### 関連情報
+#### 関連情報
 
 + AWS CloudFormationのスタックとテンプレートに関しては[ここ](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-whatis-concepts.html)
 
@@ -76,7 +76,39 @@ For pricing information, see AWS CloudFormation Pricing.
 
 + 価格に関しては[ここ](http://aws.amazon.com/jp/cloudformation/pricing/)
 
+### AWS CloudFormation Concepts
+
+When you use AWS CloudFormation, you work with templates and stacks. You create templates to describe your AWS resources and their properties. Whenever you create a stack, AWS CloudFormation provisions the resources that are described in your template.
+
+### AWS CloudFormationコンセプト
+
+AWS CloudFormationを使う時、テンプレートとスタックを使います。AWSリソースとプロパティを記述したテンプレートを作る。スタックを作った時はいつでもAWS CloudFormationはテンプレートに書かれ内容をプロビジョニングします。
+
+Templates
+
+An AWS CloudFormation template is a text file whose format complies with the JSON standard. You can save these files with any extension, such as .json, .template, or .txt. AWS CloudFormation uses these templates as blueprints for building your AWS resources. For example, in a template, you can describe an Amazon EC2 instance, such as the instance type, the AMI ID, block device mappings, and its Amazon EC2 key pair name. Whenever you create a stack, you also specify a template that AWS CloudFormation uses to create whatever you described in the template.
+
+テンプレート
+
+AWS CloudFormationテンプレートはJSON形式でコンパイルされたテキストファイルです。.json、.templateまたは.txtといった拡張子のいずれでも使えます。AWS CloudFormationはテンプレートをAWSリソースを構築するブループリントとして使います。例えば、テンプレート内にAmazon EC2インスタンスのインスタンスタイプやAMI ID、ブロックデバイスそしてAmazon EC2キーペアを記述できます。スタックを作った時はいつでもAWS CloudFormationで使うテンプレートを特定できます。
+
+Stacks
+
+When you use AWS CloudFormation, you manage related resources as a single unit called a stack. In other words, you create, update, and delete a collection of resources by creating, updating, and deleting stacks. All the resources in a stack are defined by the stack's AWS CloudFormation template. Suppose you created a template that includes an Auto Scaling group, Elastic Load Balancing load balancer, and an Amazon RDS database instance. To create those resources, you create a stack by submitting the template that you created, and AWS CloudFormation provisions all those resources for you. To update resources, you first modify the original stack template and then update your stack by submitting the modified template. You can work with stacks by using the AWS CloudFormation console, API, or AWS CLI.
+
+For more information about creating, updating, or deleting stacks, see Working with Stacks.
+
+スタック
+
+AWS CloudFormationを使っている時、関連するリソースをスタックと呼ばれる単一の単位で管理します。言い換えればスタックを作成、更新、削除することでリソースの集合を作成、更新、削除します。スタック内の全てのリソースはAWS CloudFormationテンプレートの集まりで定義されています。オートスケールグループ、ロードバランサー、RDSデータベースインスタンスを含んだテンプレートを作る手助けをしてくれます。これらのリソースを作るため、作成したテンプレートを組み合わせてスタックを作りAWS CloudFormationでそれら全てをプロビジョニングします。リソースをアップデートするためオリジナルのスタックテンプレートを編集して編集したテンプレートをスタックに反映することで更新します。AWS CloudFormationコンソール、APIまたはCLIからスタックを操作することができます。
+
+スタックの作成、更新、削除に関する詳細は[ここ](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacks.html)
+
+
+
 ## <a name="2">はじめに</a>
+
+
 ## <a name="3">IAMによるアクセスコントロール</a>
 
 # 参照
