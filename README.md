@@ -168,19 +168,374 @@ AWS CloudFormationテンプレートを作成の詳細は[ここ](http://docs.aw
 
 ### Signing Up for an AWS Account
 
+### AWSアカウントを登録
+
 ### Get Started
 
 Step 1: Sign up for the Service
 
+#### Step 1: サインイン
+
+[AWSコンソール](http://aws.amazon.com/cloudformation)
+
 Step 2: Pick a template
+
+#### Step 2: テンプレートを選択
+
+ https://s3.amazonaws.com/cloudformation-templates-us-east-1/WordPress_Single_Instance_With_RDS.template.
+
+![002](https://farm3.staticflickr.com/2941/15373625736_1af0f9306e.jpg)
+
+![001](https://farm3.staticflickr.com/2949/15396323962_d90b809b5c.jpg)
+
+![003](https://farm3.staticflickr.com/2945/15373625656_5f1084596b.jpg)
 
 Step 3: Make sure you have prepared any required items for the stack
 
+#### Step 3: スタックに必要なアイテムが準備出来たか確認する
+
+![004](https://farm4.staticflickr.com/3919/15373625766_dbe2c44da9.jpg)
+
 Step 4: Create the stack
+
+#### Step 4: スタックを作る
+
+![008](https://farm4.staticflickr.com/3914/15210147087_aa3bda6826.jpg)
 
 Step 5: Monitor the progress of stack creation
 
+#### Step 5: スタック作成の進捗をモニターする
+
+![009](https://farm4.staticflickr.com/3919/15393475391_ec050c0370.jpg)
+
+![007](https://farm3.staticflickr.com/2942/15210146897_09c19b7db6.jpg)
+
+作成が完了したらWebWebsiteURLのリンク先をクリックしてWordPressのインストールを実行する。
+
 ### Learn Template Basics
+
+### テンプレート基本
+
+#### AWS CloudFormationテンプレートとは
+
+JSON形式のテキストファイル。
+
+#### Resources
+
+Resourcesオブジェクトは複数のResourceオブジェクトで構成されています。Resourceオブジェクトは_Type_アトリビュートを持たなければならない。_Type_アトリビュートのフォーマットは`AWS::ProductIdentifier::ResourceType`
+
+
+```json
+{
+    "Resources" : {
+        "HelloBucket" : {
+            "Type" : "AWS::S3::Bucket"
+        }
+    }
+}
+```
+
+#### Resourcesを一緒に使ったResourceプロパティ
+
+```json
+{
+    "Resources" : {
+        "HelloBucket" : {
+            "Type" : "AWS::S3::Bucket",
+            "Properties" : {
+               "AccessControl" : "PublicRead"
+            }
+        }
+    }
+}
+```
+
+複数プロパティ
+
+```json
+{
+    "Resources" : {
+        "HelloBucket" : {
+            "Type" : "AWS::S3::Bucket",
+            "Properties" : {
+               "AccessControl" : "PublicRead",
+               "WebsiteConfiguration" : {
+                    "IndexDocument" : "index.html",
+                    "ErrorDocument" : "error.html"
+               }
+            }
+        }
+    }
+}
+```
+
+[Ref関数](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ref.html)を使った場合
+
+```json
+{
+  "Resources" : {
+    "Ec2Instance" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
+        "KeyName" : "mykey",
+        "ImageId" : ""
+      }
+    },
+
+    "InstanceSecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable SSH access via port 22",
+        "SecurityGroupIngress" : [ {
+          "IpProtocol" : "tcp",
+          "FromPort" : "22",
+          "ToPort" : "22",
+          "CidrIp" : "0.0.0.0/0"
+        } ]
+      }
+    }
+  }
+}
+```
+
+テンプレートで宣言されていないセキュリティグループを使う
+
+```json
+{
+  "Resources" : {
+    "Ec2Instance" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" }, "MyExistingSecurityGroup" ],
+        "KeyName" : "mykey",
+        "ImageId" : "ami-7a11e213"
+      }
+    },
+
+    "InstanceSecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable SSH access via port 22",
+        "SecurityGroupIngress" : [ {
+          "IpProtocol" : "tcp",
+          "FromPort" : "22",
+          "ToPort" : "22",
+          "CidrIp" : "0.0.0.0/0"
+        } ]
+      }
+    }
+  }
+}
+```
+
+キーペアを入力パラメータにする
+
+```json
+{
+  "Parameters" : {
+    "KeyName" : {
+      "Description" : "The EC2 Key Pair to allow SSH access to the instance",
+      "Type" : "String"
+    }
+  },
+  "Resources" : {
+    "Ec2Instance" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" }, "MyExistingSecurityGroup" ],
+        "KeyName" : { "Ref" : "KeyName"},
+        "ImageId" : "ami-7a11e213"
+      }
+    },
+
+    "InstanceSecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable SSH access via port 22",
+        "SecurityGroupIngress" : [ {
+          "IpProtocol" : "tcp",
+          "FromPort" : "22",
+          "ToPort" : "22",
+          "CidrIp" : "0.0.0.0/0"
+        } ]
+      }
+    }
+  }
+}
+```
+
+[GetAtt関数](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html)を使う
+
+```json
+{
+    "Resources" : {
+        "myBucket" : {
+            "Type" : "AWS::S3::Bucket"
+        },
+        "myDistribution" : {
+           "Type" : "AWS::CloudFront::Distribution",
+           "Properties" : {
+              "DistributionConfig" : {
+                   "S3Origin" : {
+                       "DNSName": {"Fn::GetAtt" : ["myBucket", "DomainName"]}
+                   }
+               }
+            }
+        }
+    }
+}
+```
+
+#### インプットパラメータを使ったユーザーからの入力受け取り
+
+```json
+  "Parameters": {
+    "KeyName": {
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access into the WordPress web server",
+      "Type": "String"
+    },
+    "WordPressUser": {
+      "Default": "admin",
+      "NoEcho": "true",
+      "Description" : "The WordPress database admin account user name",
+      "Type": "String",
+      "MinLength": "1",
+      "MaxLength": "16",
+      "AllowedPattern" : "[a-zA-Z][a-zA-Z0-9]*"
+    },
+    "WebServerPort": {
+      "Default": "8888",
+      "Description" : "TCP/IP port for the WordPress web server",
+      "Type": "Number",
+      "MinValue": "1",
+      "MaxValue": "65535"
+    }
+  },
+```
+
+#### Mapping使った特定条件に該当する値の取得
+
+```json
+{
+  "Parameters" : {
+    "KeyName" : {
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+      "Type" : "String"
+    }
+  },
+
+  "Mappings" : {
+    "RegionMap" : {
+      "us-east-1" : {
+          "AMI" : "ami-76f0061f"
+      },
+      "us-west-1" : {
+          "AMI" : "ami-655a0a20"
+      },
+      "eu-west-1" : {
+          "AMI" : "ami-7fd4e10b"
+      },
+      "ap-southeast-1" : {
+          "AMI" : "ami-72621c20"
+      },
+      "ap-northeast-1" : {
+          "AMI" : "ami-8e08a38f"
+      }
+    }
+  },
+
+  "Resources" : {
+    "Ec2Instance" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "KeyName" : { "Ref" : "KeyName" },
+        "ImageId" : { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "AMI" ]},
+        "UserData" : { "Fn::Base64" : "80" }
+      }
+    }
+  }
+}
+```
+
+#### 値構築と出力値
+
+
+```json
+  "Resources" : {
+    "ElasticLoadBalancer" : {
+      "Type" : "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties" : {
+        "AvailabilityZones" : { "Fn::GetAZs" : "" },
+        "Instances" : [ { "Ref" : "Ec2Instance1" },{ "Ref" : "Ec2Instance2" } ],
+        "Listeners" : [ {
+          "LoadBalancerPort" : "80",
+          "InstancePort" : { "Ref" : "WebServerPort" },
+          "Protocol" : "HTTP"
+        } ],
+        "HealthCheck" : {
+          "Target" : { "Fn::Join" : [ "", ["HTTP:", { "Ref" : "WebServerPort" }, "/"]]},
+          "HealthyThreshold" : "3",
+          "UnhealthyThreshold" : "5",
+          "Interval" : "30",
+          "Timeout" : "5"
+        }
+      }
+    },
+```
+
+Targetプロパティの出力
+
+```
+HTTP:8888/
+```
+
+AWSコンソールCloudFormationのOutputsタグに表示される値
+
+```json
+  "Outputs": {
+    "InstallURL": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "http://",
+            {
+              "Fn::GetAtt": [
+                "ElasticLoadBalancer",
+                "DNSName"
+              ]
+            },
+            "/wp-admin/install.php"
+          ]
+        ]
+      },
+      "Description" : "Installation URL of the WordPress website"
+    },
+    "WebsiteURL": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "http://",
+            {
+              "Fn::GetAtt": [
+                "ElasticLoadBalancer",
+                "DNSName" ]
+            }
+          ]
+        ]
+      }
+    }
+  }
+```
+
+出力値
+
+```
+http://mywptests-elasticl-1gb51l6sl8y5v-206169572.us-east-1.elb.amazonaws.com/wp-admin/install.php
+```
+
 
 ### Walkthrough: Updating a Stack
 
