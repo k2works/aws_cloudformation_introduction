@@ -12,7 +12,6 @@ AWS CloudFormationの[公式ガイド](http://docs.aws.amazon.com/AWSCloudFormat
 # 構成
 + [AWS CloudFormationとは](#1)
 + [はじめに](#2)
-+ [IAMによるアクセスコントロール](#3)
 
 # 詳細
 ## <a name="1">AWS CloudFormationとは</a>
@@ -535,17 +534,6 @@ AWSコンソールCloudFormationのOutputsタグに表示される値
 ```
 http://mywptests-elasticl-1gb51l6sl8y5v-206169572.us-east-1.elb.amazonaws.com/wp-admin/install.php
 ```
-
-
-### Walkthrough: Updating a Stack
-
-### Walkthrough: Custom Resources
-
-### Using CloudFormer to Create Templates
-
-### AWS CloudFormation Endpoints
-
-## <a name="3">IAMによるアクセスコントロール</a>
 
 # 参照
 
