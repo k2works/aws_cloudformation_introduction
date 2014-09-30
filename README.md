@@ -98,8 +98,6 @@ AWS CloudFormationテンプレートを作成の詳細は[ここ](http://docs.aw
 
 ## <a name="2">はじめに</a>
 
-### Signing Up for an AWS Account
-
 ### AWSアカウントを登録
 
 ### Get Started
